@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block page_content %}
+    <h1> Top Charts</h1>
+    <div class="container">
+		<div class="row">
+            {% if books and books|length > 0 %}
+            <div class="col-6">
+			<h3>Most Popular Books </h3>
+            </div>
+            <div class="col-6">
+			<form action={{ url_for('topCharts') }} method='POST' >
+				<select name="books-n">
+					<option name="books-n" value=5 default>5</option>
+					<option name="books-n" value=10>10</option>
+					<option name="books-n" value=20>20</option>
+				</select>
+			    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+			</form>
+            </div>
+            <div class="col-6">
+			<table class="table table-striped">
+                {% for book in books %}
+                <tr>
+                    <th scope="row">#{{ book.rank }}</th>
+                    <td>{{ book.title }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if authors and authors|length > 0 %}
+            <div class="col-6">
+			<h3>Most Popular Authors </h3>
+            </div>
+            <div class="col-6">
+			<form action={{ url_for('topCharts') }} method='POST' >
+				<select name="authors-n">
+					<option name="authors-n" value=5 default>5</option>
+					<option name="authors-n" value=10>10</option>
+					<option name="authors-n" value=20>20</option>
+				</select>
+			    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+			</form>
+            </div>
+            <div class="col-6">
+			<table class="table table-striped">
+                {% for author in authors %}
+                <tr>
+                    <th scope="row">#{{ author.rank }}</th>
+                    <td>{{ author.author }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if publishers and publishers|length > 0 %}
+            <div class="col-6">
+			<h3>Most Popular Publishers </h3>
+            </div>
+            <div class="col-6">
+			<form action={{ url_for('topCharts') }} method='POST' >
+				<select name="publishers-n">
+					<option name="publishers-n" value=5 default>5</option>
+					<option name="publishers-n" value=10>10</option>
+					<option name="publishers-n" value=20>20</option>
+				</select>
+			    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+			</form>
+            </div>
+            <div class="col-6">
+			<table class="table table-striped">
+                {% for publisher in publishers %}
+                <tr>
+                    <th scope="row">#{{ publisher.rank }}</th>
+                    <td><p class="text-left">{{ publisher.publisher }}</p></td>
+                </tr>
+                {% endfor %}
+            </table>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}

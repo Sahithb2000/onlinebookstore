@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+<a href={{url_for('managerLogin') }}> Login as manager</a>
+
+<form action="/login" method="POST">
+	<p>username: <input type="text" name="username" required></p>
+	<p>password: <input type="password" name="password" required></p>
+	<p><input type="submit" value="login"></p>
+	<a href="/register">New user? Sign up</a>
+</form>
+
+{% endblock %}
+

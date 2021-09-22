@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block page_content %}
+<h2> Goods Movement : {{ movement_type }}</h2>
+<table class="table">
+    <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publisher</th>
+        <th>Quantity</th>
+        <th>Change</th>
+        <th></th>
+    </tr>
+{% for book in books %}
+    <tr>
+        <td>{{ book.isbn }}</td>
+        <td><img src={{ url_for( 'static' , filename = '/uploads/' + book.image_filename) }}></td>
+        <td >{{book.title}}</td>
+        <td >{{book.author}}</td>
+        <td ><SPAN>{{book.publisher}}</SPAN></td>
+        <td ><SPAN>{{book.quantity}}</SPAN></td>
+        <form method="POST" action={{ url_for('goodsMovement', movement_type=movement_type ) }}>
+        <input type="hidden" value={{ book.isbn }} name="isbn">
+        <input type="hidden" value={{ book.quantity }} name="quantity">
+        {% if movement_type == 'inward' %}
+        <td><input type="number" value="0" name="change"></td>
+        {% else %}
+        <td><input type="number" value="0" min=0 max={{ book.quantity }} name="change"></td>
+        {% endif %}
+        {% if movement_type == 'inward' %}
+        <td><input type="submit" value="Add Quantity"></td>
+        {% else %}
+        <td><input type="submit" value="Deduct Quantity"></td>
+        {% endif %}
+        
+    </form>
+    </tr>
+{% endfor %}
+</table>    
+{% endblock %}

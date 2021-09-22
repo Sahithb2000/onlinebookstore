@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div class="display">
+	<h2>Edit profile</h2>
+	<form action="/account/profile/update" method="POST">
+		<p>Username:<input type="text" name="username" value={{ user_details.username }} readonly></p>
+		<p>Full Name:<input type="text" name="full_name" value={{ user_details.full_name }}></p>
+		<p>Address:<input type="text" name="address" value={{ user_details.address }}></p>
+		<p>Phone Number: <input type="text" name="phone_number" value={{ user_details.phone_number }}></p>
+		<input type="submit" value="Save">
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block page_content %}
+<body>
+    <h1 class="h1"> User Awards</h1>
+    <div class="container">
+		<div class="row">
+            {% if trusted_users and trusted_users|length > 0 %}
+            <div class="col-12">
+			<h3>Most Trustful Users </h3>
+            </div>
+            <div class="col-6">
+			<table class="table table-striped table-nonfluid">
+                <thead>
+                    <tr>
+                      <th scope="col">Rank</th>
+                      <th scope="col">User</th>
+                      <th scope="col">Trusters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in trusted_users %}
+                <tr>
+                    <th scope="row">#{{ user.rank }}</th>
+                    <td> <a href={{ url_for('viewUser', username = user.username) }}> {{user.username }} </a> </a></td>
+                    <td>{{ user.stat }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            {% if useful_users and useful_users|length > 0 %}
+            <div class="col-12">
+			<h3 class="h3">Most Useful Users </h3>
+            </div>
+            <div class="col-6">
+			<table class="table table-striped">
+                <thead>
+                    <tr>
+                      <th scope="col">Rank</th>
+                      <th scope="col">User</th>
+                      <th scope="col">Usefulness Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in useful_users %}
+                <tr>
+                    <th scope="row">#{{ user.rank }}</th>
+                    <td> <a href={{ url_for('viewUser', username = user.username) }}> {{user.username }} </a> </a></td>
+                    <td>{{ user.stat }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

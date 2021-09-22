@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	.checked {
+		color: orange; 
+	}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div id="display">
+	<div id="productName">
+		<h1>{{book_details.title}}</h1>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4">
+				<img src={{url_for('static', filename='uploads/'+ book_details.image_filename) }} style="height:300px; width:auto;"id="productImage"/>
+	
+			</div>
+			<div class="col-sm-8">
+				<h3>Details</h3>
+				<table class="table table-striped">
+					<tr>
+						<th scope="row">ISBN</th>
+						<td>{{ book_details.isbn }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Name</th>
+						<td>{{ book_details.title }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Price</th>
+						<td>${{ book_details.price }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Number of pages</th>
+						<td>{{ book_details.pages }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Language</th>
+						<td>{{ book_details.language }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Subject</th>
+						<td>{{ book_details.subject }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Publisher</th>
+						<td>{{ book_details.publisher }}</td>
+					</tr>
+					<tr>
+						<th scope="row">Publish Date</th>
+						<td>{{ book_details.publish_date }}</td>
+					</tr>
+					{% if reviews|length > 0 %}
+					<tr>
+						<th scope="row">Rating</th>
+						<td>{{ rating }} / 10</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-4">
+				<form action= {{ url_for('addToCart', isbn = book_details.isbn )}} method="post">
+					<button type="submit" name="add_to_cart_button" value="Add to Cart" class="btn btn-primary">Add to cart</button>
+				</form>
+			</div>
+			<div class="col-6">
+
+			</div>
+		</div>
+	</div>
+	{% if recommendations and recommendations|length > 0 %}
+		<br>	
+		<h3>Recommendations:</h3>
+		<div class="container">
+			<div class="row">
+			{% for book in recommendations %}
+				<div class="col-sm-4">
+					<a href="{{ url_for('viewProduct', isbn = book.isbn ) }}">
+						<img class="productImage" style="height:150px; width:auto;"src={{url_for('static', filename='uploads/'+ book.image_filename) }} />
+						<p>{{ book.title }}</p>
+					</a>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	<ul class="posts">
+		<h3>Reviews:</h3>
+		{% if reviewed == false and logged_in %}
+		<li class="post">
+			<ul>
+			<div class="post-content">
+				<a href="{{ url_for('addReview', isbn = book_details.isbn) }}">
+					<span class="label label-primary">Write a review...</span>
+				</a>				
+			</div>
+			</ul>
+		</li>
+		{% endif %}	
+		{% if reviews|length > 0 %}
+		<div class='review-filter'>
+			<form action={{ url_for('viewProduct', isbn = book_details.isbn ) }} method='POST' >
+				<select name="filter-field">
+					<option name="filter-field" value="timestamp">Newest to Oldest</option>
+					<option name="filter-field" value="score">Order by score</option>
+				</select>	
+				<select name="filter-n">
+					<option name="filter-field" value=5>5</option>
+					<option name="filter-field" value=10>10</option>
+					<option name="filter-field" value=20>20</option>
+				</select>
+				<button type="submit" class="btn btn-primary btn-sm">Filter</button>
+			</form>
+		</div>
+		{% endif %}
+		{% for review in reviews %}
+		<li class="post">
+			<div class="post-content">
+				<div class="post-date">{{ review.display_time }}</div>
+				<div class="post-author"><a href="{{ url_for('viewUser', username = review.reviewer) }}">{{ review.reviewer }}</a></div>
+				<div class="post-body">
+				<p> <strong>Rating:</strong> 
+					{% for n in range( review.rating ) %}
+						<span class="fa fa-star checked"></span>
+					{% endfor %}	
+					{% for n in range( 10 - review.rating ) %}
+						<span class="fa fa-star"></span>
+					{% endfor %}	
+				</p>
+				{% if review.comment %}
+					{{ review.comment }}
+				{% endif %}
+				</div>
+				<div class="post-footer">
+				{% if logged_in == review.reviewer %}
+				<a href="{{ url_for('editReview', isbn = book_details.isbn, review_id = review.review_id) }}">
+					<span class="label label-primary">Edit</span>
+				</a>
+				{% endif %}
+				<span>.</span>
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'useless') }}">
+					<span class="label label-default"> useless({{ review.votes_stats.useless }})</span>
+				</a>
+				<span>.</span>
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'useful') }}">
+					<span class="label label-default"> useful({{ review.votes_stats.useful }})</span>
+				</a>
+				<span>.</span>
+				<!-- <form method="POST" action={{ url_for('voteReview', review_id = review.review_id, vote_type = 'very_useful') }}>
+					<input type="button" value="very useful({{ review.votes_stats.very_useful }})">
+					<input type="button" value="very useful({{ review.votes_stats.very_useful }})"> 
+				</form> -->
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'very_useful') }}">
+					<span class="label label-default"> very useful({{ review.votes_stats.very_useful }})</span>
+				</a>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}

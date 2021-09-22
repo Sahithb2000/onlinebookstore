@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div id="container">
+<h2> My Cart </h2>
+{% if books|length > 0 %}
+    <form method="POST" action={{ url_for('viewCart') }}>
+    <table class="table">
+        <tr>
+            <th>Select</th>
+            <th>ISBN</th>
+            <th>Cover Image</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Quantity</th>
+            <th></th>
+        </tr>
+    {% for book in books %}
+        <tr>
+            <td class="col-xs-3">
+                <label class="c-input c-checkbox">
+                    <input type="checkbox" name="selected_items" value= {{ book.isbn }} class="checkboxSelection">
+                    <!-- <span class="c-indicator"></span> -->
+                </label>
+            </td>
+            <td>{{ book.isbn }}</td>
+            <td><img src={{ url_for( 'static' , filename = 'uploads/' + book.image_filename) }}></td>
+            <td >{{book.title}}</td>
+            <td >{{book.author}}</td>
+            <td><input type="number" value="0" min=0 max={{ book.quantity }} name="quantity-{{ book.isbn }}"></td>
+        </tr>
+    {% endfor %}
+    </table>    
+    <input type="submit" value="Place Order">
+    </form>
+{% else %}
+    <div class = "container">
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Cart is empty
+            
+        </div>
+    </div>
+{% endif %}
+</div>
+{% endblock %}

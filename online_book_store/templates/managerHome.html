@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_content %}
+<a href={{ url_for('addBook') }}>Add books</a><br>
+<a href={{ url_for('addManager') }}>Add Manager</a><br>
+<a href={{ url_for('goodsMovement', movement_type = 'inward') }}>Inward Books</a><br>
+<a href={{ url_for('goodsMovement', movement_type = 'outward') }}>Outward Books</a><br>
+<a href={{ url_for('managerLogout') }}>Logout</a><br>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div id="display">
+	<div id="productName">
+		<h1>{{ user.username }}</h1>
+    </div>
+    {% if logged_in != user.username %}
+        <a href="{{ url_for('trustVoteUser', username=user.username, vote_val=1) }}">
+            <span class="label label-primary">Trust({{ user.trusts }})</span>
+        </a>
+        <span> . </span>
+        <a href="{{ url_for('trustVoteUser', username=user.username, vote_val=-1) }}">
+            <span class="label label-primary">Not Trust({{ user.non_trusts }})</span>
+        </a>
+    {% endif %}    
+	<ul class="posts">
+		{% for review in user.reviews %}
+		<li class="post">
+			<div class="post-content">
+				<div class="post-date">{{ review.display_time }}</div>
+				<div class="post-author"><a href="{{ url_for('home') }}">{{ review.reviewer }}</a> on <a href="{{ url_for('viewProduct',isbn= review.isbn) }}">{{ review.product_title }}</a>:</div>
+				<div class="post-body">
+				<p> <strong>Rating:</strong> {{ review.rating}} / 10</p>
+				{% if review.comment %}
+					{{ review.comment }}
+				{% endif %}
+				</div>
+				<div class="post-footer">
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'useless') }}">
+					<span class="label label-default"> useless({{ review.votes_stats.useless }})</span>
+				</a>
+				<span>.</span>
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'useful') }}">
+					<span class="label label-default"> useful({{ review.votes_stats.useful }})</span>
+				</a>
+				<span>.</span>
+				<a href="{{ url_for('voteReview', review_id = review.review_id, vote_type = 'very_useful') }}">
+					<span class="label label-default"> very useful({{ review.votes_stats.very_useful }})</span>
+				</a>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}

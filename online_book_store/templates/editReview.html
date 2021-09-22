@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div class = "container">
+    <div class="form-group">
+        {% if review %} 
+        <div class="page-header">
+            <h1>Edit Review</h1>
+         </div>
+        <form action= {{ url_for('editReview', isbn = isbn, review_id = review.review_id )}} method="post">
+            <p>Rating : <input type="number" name="rating" min=1 max=10 value={{ review.rating }}></p>
+            <p>Review : <input type="text" name="comment" value= '{{review.comment}}' ></p>
+            <button class="btn btn-primary" type="submit" name="add_to_cart_button" value="Submit Review" class="btn-link">Submit Review</button></form>
+        </form>
+        {% else %}
+        <div class="page-header">
+            <h1>Add Review</h1>
+        </div>
+        <form action= {{ url_for('addReview', isbn = isbn ) }} method="post">
+            <p>Rating : <input type="number" name="rating" min=1 max=10></p>
+            <p>Review : <input type="text" name="comment"></p>
+            <button class="btn btn-primary" type="submit" name="add_to_cart_button" value="Submit Review" class="btn-link">Submit Review</button></form>
+        </form>
+        {% endif %}
+                         
+    </div>
+</div>
+{% endblock %}

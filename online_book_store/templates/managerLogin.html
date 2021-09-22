@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_content %}
+<form action={{ url_for('managerLogin') }} method="POST">
+	<p>username: <input type="text" name="username" required></p>
+	<p>password: <input type="password" name="password" required></p>
+	<p><input type="submit" value="login"></p>
+</form>
+{% endblock %}
